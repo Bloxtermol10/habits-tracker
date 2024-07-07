@@ -9,7 +9,7 @@ import {
 	Setting,
 	WorkspaceLeaf,
 } from "obsidian";
-import { DashBoard, VIEW_TYPE_DASH_BOARD } from "Views/DashBoard.view";
+import { DashBoardView, VIEW_TYPE_DASH_BOARD } from "Views/DashBoard.view";
 
 // Remember to rename these classes and interfaces!
 
@@ -27,7 +27,10 @@ export default class MyPlugin extends Plugin {
 	async onload() {
 		await this.loadSettings();
 
-		this.registerView(VIEW_TYPE_DASH_BOARD, (leaf) => new DashBoard(leaf));
+		this.registerView(
+			VIEW_TYPE_DASH_BOARD,
+			(leaf) => new DashBoardView(leaf)
+		);
 		this.activateView();
 		// This creates an icon in the left ribbon.
 		const ribbonIconEl = this.addRibbonIcon(

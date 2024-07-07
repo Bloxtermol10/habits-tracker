@@ -1,8 +1,10 @@
 import { ItemView, WorkspaceLeaf } from "obsidian";
+import { createRoot } from "react-dom/client";
+import DashBoard from "./DashBoard";
 
 export const VIEW_TYPE_DASH_BOARD = "dash-board";
 
-export class DashBoard extends ItemView {
+export class DashBoardView extends ItemView {
 	constructor(leaf: WorkspaceLeaf) {
 		super(leaf);
 	}
@@ -12,13 +14,19 @@ export class DashBoard extends ItemView {
 	}
 
 	getDisplayText() {
-		return "Example view";
+		return "Dash Board";
+	}
+
+	getIcon() {
+		return "calendar";
 	}
 
 	async onOpen() {
 		const container = this.containerEl.children[1];
 		container.empty();
-		container.createEl("h4", { text: "Dash Board" });
+		createRoot(container).render(
+			<DashBoard />
+		);
 	}
 
 	async onClose() {
