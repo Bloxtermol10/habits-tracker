@@ -8,7 +8,11 @@ import Lozenge from '@atlaskit/lozenge';
 import { Box, Inline, Stack, Text, xcss } from '@atlaskit/primitives';
 import Button, { ButtonGroup } from '@atlaskit/button'
 import Calendar from '@atlaskit/calendar';
-import DynamicTable from '@atlaskit/dynamic-table';
+
+import { useEffect } from 'react';
+import { increaseClassSpecificity } from './utilities/increase-spacifity-class';
+import { ModalHeader } from '@atlaskit/modal-dialog';
+import ModalDialog from './components/ModalDialog';
 
 const containerStyles = xcss({
     display: 'flex',
@@ -80,49 +84,53 @@ function createKey(value: string): string {
 
 
 
-const head = [
-    {
-        key: createKey('Name'),
-        content: 'Name',
-    }
-    ,
-    {
-        key: createKey('Party'),
-        content: 'Party',
-    },
-    {
-        key: createKey('Term'),
-        content: 'Term',
-    }
-]
-// applied as rows in the form
-console.log(presidents)
-const rows = presidents.map((president: President, index: number) => ({
-    key: `row-${index}-${president.name}`,
-    cells: [
-        {
-            key: createKey(president.name),
-            content: (
+// const head = [
+//     {
+//         key: createKey('Name'),
+//         content: 'Name',
+//     }
+//     ,
+//     {
+//         key: createKey('Party'),
+//         content: 'Party',
+//     },
+//     {
+//         key: createKey('Term'),
+//         content: 'Term',
+//     }
+// ]
+// // applied as rows in the form
+// console.log(presidents)
+// const rows = presidents.map((president: President, index: number) => ({
+//     key: `row-${index}-${president.name}`,
+//     cells: [
+//         {
+//             key: createKey(president.name),
+//             content: (
 
-                <Avatar name={president.name} size="medium" />
+//                 <Avatar name={president.name} size="medium" />
 
 
-            ),
-        },
-        {
-            key: createKey(president.party),
-            content: president.party,
-        },
-        {
-            key: president.id,
-            content: president.term,
-        },
-    ]
-}))
+//             ),
+//         },
+//         {
+//             key: createKey(president.party),
+//             content: president.party,
+//         },
+//         {
+//             key: president.id,
+//             content: president.term,
+//         },
+//     ]
+// }))
 
 
 
 function DashBoard() {
+    useEffect(() => {
+        increaseClassSpecificity();
+        console.log("Render DashBoard")
+    })
 
     return (
         <div>
@@ -132,15 +140,19 @@ function DashBoard() {
 
             </ButtonGroup>
             <Example />
-            <Calendar
-                maxDate={'2020-12-25'}
-                defaultPreviouslySelected={defaultPreviouslySelected}
-                defaultSelected={defaultSelected}
-                defaultMonth={12}
-                defaultYear={2020}
-                testId={'calendar'}
-            />
-            <DynamicTable
+            <Box >
+
+                <Calendar
+                    maxDate={'2020-12-25'}
+                    defaultPreviouslySelected={defaultPreviouslySelected}
+                    defaultSelected={defaultSelected}
+                    defaultMonth={12}
+                    defaultYear={2020}
+                    testId={'calendar'}
+                />
+                <ModalDialog />
+            </Box>
+            {/* <DynamicTable
                 caption="List of US Presidents"
                 head={head}
                 rows={rows}
@@ -151,7 +163,7 @@ function DashBoard() {
                 defaultSortOrder="ASC"
                 onSort={() => console.log('onSort')}
                 onSetPage={() => console.log('onSetPage')}
-            />
+            /> */}
 
         </div>
     )
