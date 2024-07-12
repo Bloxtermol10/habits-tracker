@@ -42,7 +42,7 @@ function DashBoard() {
                 Habits Tracker
             </h1>
             <Button appearance="primary" onClick={handleClick}>
-                Crea un nuevo habito.
+                ¡Nuevo habito!
             </Button>
         </Container>
 

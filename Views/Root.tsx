@@ -11,11 +11,13 @@ function Root({ app, }: Props) {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(setApp(app));
+        try {
+            dispatch(setApp(app));
+        } catch (error) {
+            console.error(error);
+        }
     }, [])
 
-    return (
-        <></>
-    )
+    return null
 }
 export default Root
