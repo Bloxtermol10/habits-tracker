@@ -29,7 +29,7 @@ export default class MyPlugin extends Plugin {
 
 		this.registerView(
 			VIEW_TYPE_DASH_BOARD,
-			(leaf) => new DashBoardView(leaf)
+			(leaf) => new DashBoardView(leaf, this.app)
 		);
 		this.activateView();
 		// This creates an icon in the left ribbon.
@@ -91,9 +91,9 @@ export default class MyPlugin extends Plugin {
 
 		// If the plugin hooks up any global DOM events (on parts of the app that doesn't belong to this plugin)
 		// Using this function will automatically remove the event listener when this plugin is disabled.
-		this.registerDomEvent(document, "click", (evt: MouseEvent) => {
-			console.log("click", evt);
-		});
+		// this.registerDomEvent(document, "click", (evt: MouseEvent) => {
+		// 	console.log("click", evt);
+		// });
 
 		// When registering intervals, this function will automatically clear the interval when the plugin is disabled.
 		this.registerInterval(
