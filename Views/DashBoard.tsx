@@ -1,5 +1,4 @@
 import Button from "@atlaskit/button/new"
-import { timeStamp } from "console";
 import { Habit, PropsCreate } from "entities/Habit";
 import useApp from "hooks/useApp";
 import { MouseEvent } from "react";
