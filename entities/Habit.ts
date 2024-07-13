@@ -38,28 +38,32 @@ export class Habit {
         this.app = (app)
     }
 
-    async CreateHabit({name, properties}  : PropsCreate) {
-        const fileutilities = new Utilitiesfile(this.app)
-        try {
-        if(await fileutilities.ExistingFile({patch : `${name}.md`}))
-            {
-                throw new Error(`File ${name}.md already exists`)
-            }else{
-                this.app.vault.create(`${name}.md`, `---\n${stringifyYaml(properties)}\n---`)//`# ${properties}`)
+        async Create({name, properties}  : PropsCreate) {
+            const fileutilities = new Utilitiesfile(this.app)
+            try {
+            if(await fileutilities.ExistingFile({patch : `${name}.md`}))
+                {
+                    throw new Error(`File ${name}.md already exists`)
+                }else{
+                    this.app.vault.create(`${name}.md`, `---\n${stringifyYaml(properties)}\n---`)//`# ${properties}`)
+                }
+            } catch (error) {
+                console.error(error)
             }
-        } catch (error) {
-            console.error(error)
         }
-    }
         
-        async ReadHabitProperties({name}  : PropsCreate) {
+        async GetProperties({name}  : PropsCreate) {
             const fileutilities = new Utilitiesfile(this.app)
             await fileutilities.ReadPropertiesFile({patch: `${name}.md`}).catch((error) => {console.error(error)})              
         }
 
-        async ReadFile({name}  : PropsCreate) {
+        async Get({name}  : PropsCreate) {
             const fileutilities = new Utilitiesfile(this.app)
             await fileutilities.ReadFile({patch: `${name}.md`}).catch((error) => {console.error(error)})
         }
 
-    }
+        async Modify ({name, properties}  : PropsCreate) {
+            const fileutilities = new Utilitiesfile(this.app)
+        }
+}
+
