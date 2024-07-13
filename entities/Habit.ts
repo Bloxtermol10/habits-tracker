@@ -30,14 +30,6 @@ export type Frequency =
      FrequencyEnum.Yearly |
      DaysEnum[]
 
-
-
-
-
-const myFrequency : Frequency = [DaysEnum.Monday, DaysEnum.Friday]
-const myFrequency2 : Frequency = FrequencyEnum.Daily
-
-
 export class Habit {
    private readonly app: App
     constructor(app: App) {
