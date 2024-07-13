@@ -10,7 +10,6 @@ export const VIEW_TYPE_DASH_BOARD = "dash-board";
 
 export class DashBoardView extends ItemView {
 
-	#app: App
 	constructor(leaf: WorkspaceLeaf, app: App) {
 		super(leaf);
 		this.app = app;
