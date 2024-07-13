@@ -9,14 +9,14 @@ export class Utilitiesfile {
     constructor(app: App) {
         this.app = (app)
     }
-    async Existingfile({patch} : Propsutilities) {
-       const file = await this.Getfile({patch})
+    async ExistingFile({patch} : Propsutilities) {
+       const file = await this.GetFile({patch})
        if(file === null){
            return false
        }
            return true
     }
-    async Getfile({patch} : Propsutilities) {
+    async GetFile({patch} : Propsutilities) {
 
         const file = this.app.vault.getFileByPath(patch)
         if (file === null) {
@@ -26,8 +26,8 @@ export class Utilitiesfile {
         }
     }
 
-    async Openfile({patch} : Propsutilities) {
-        await this.Getfile({patch}).then((file) => {
+    async OpenFile({patch} : Propsutilities) {
+        await this.GetFile({patch}).then((file) => {
             if (file === null) {
                 throw new Error('File not found')
             }
@@ -37,8 +37,8 @@ export class Utilitiesfile {
         })
     }
 
-    private async readFileCommon({ patch }: Propsutilities) {
-        const file = await this.Getfile({ patch });
+    private async ReadFileCommon({ patch }: Propsutilities) {
+        const file = await this.GetFile({ patch });
         if (file === null) {
             throw new Error('File not found');
         }
@@ -46,13 +46,13 @@ export class Utilitiesfile {
         return text;
     }
 
-    async Readpropertiesfile({patch}  : Propsutilities) {
-        const text = await this.readFileCommon({ patch });
+    async ReadPropertiesFile({patch}  : Propsutilities) {
+        const text = await this.ReadFileCommon({ patch });
         return load(text.split('---')[1])
     }
     
-    async Readfile({patch}  : Propsutilities) {
-        const text = await this.readFileCommon({ patch });
+    async ReadFile({patch}  : Propsutilities) {
+        const text = await this.ReadFileCommon({ patch });
         try {
         const filepart = [{}];
         const documents = loadAll(text);
@@ -61,8 +61,7 @@ export class Utilitiesfile {
            });
            return filepart 
        } catch (error) {
-           console.error(error);
-           return false;
+           return error;
        }    
     }
 

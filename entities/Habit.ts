@@ -1,6 +1,8 @@
 import {App, stringifyYaml} from "obsidian"
 import { Utilitiesfile } from "./Utilitiesfile"
 import { load } from "js-yaml"
+import { themeColorModes } from "@atlaskit/tokens/dist/types/theme-config"
+import { error } from "console"
 export interface PropsCreate{
     name: string
     properties: {}
@@ -36,33 +38,28 @@ export class Habit {
         this.app = (app)
     }
 
-    async Createhabit({name, properties}  : PropsCreate) {
+    async CreateHabit({name, properties}  : PropsCreate) {
         const fileutilities = new Utilitiesfile(this.app)
-        if(await fileutilities.Existingfile({patch : `${name}.md`}))
+        try {
+        if(await fileutilities.ExistingFile({patch : `${name}.md`}))
             {
-                console.error(`File ${name}.md already exists`)
+                throw new Error(`File ${name}.md already exists`)
             }else{
                 this.app.vault.create(`${name}.md`, `---\n${stringifyYaml(properties)}\n---`)//`# ${properties}`)
             }
-            fileutilities.Openfile({patch: `${name}.md`})
+        } catch (error) {
+            console.error(error)
         }
+    }
         
-        async Readhabitproperties({name}  : PropsCreate) {
+        async ReadHabitProperties({name}  : PropsCreate) {
             const fileutilities = new Utilitiesfile(this.app)
-            const properties = await fileutilities.Readpropertiesfile({patch: `${name}.md`})
-            console.log(properties)
-                
+            await fileutilities.ReadPropertiesFile({patch: `${name}.md`}).catch((error) => {console.error(error)})              
         }
 
-        async Readfile({name}  : PropsCreate) {
+        async ReadFile({name}  : PropsCreate) {
             const fileutilities = new Utilitiesfile(this.app)
-            const contentfile = await fileutilities.Readfile({patch: `${name}.md`})
-            console.log(contentfile)       
+            await fileutilities.ReadFile({patch: `${name}.md`}).catch((error) => {console.error(error)})
         }
 
-        
-        
-
-    
-   
     }
