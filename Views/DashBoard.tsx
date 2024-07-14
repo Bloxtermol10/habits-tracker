@@ -4,6 +4,7 @@ import {Props, DaysEnum} from "entities/Utilitiesfile";
 import useApp from "hooks/useApp";
 import { MouseEvent } from "react";
 import styled from "styled-components";
+import { obj, objedit } from "./dev/mooks/mook_habit";
 
 const Container = styled.section`
 display: flex;
@@ -12,23 +13,6 @@ align-items: center;
 justify-content: center;
 height: 100vh;
 `
-const date = new Date();
-
-const obj : Props = {
-        name : "6-10",
-        properties:{
-        description : "hola soy nuevo",
-        frecuency : [DaysEnum.EveryDay],
-    } 
-}
-const objedit : Props = {
-        name : "6-10",
-        properties:{
-        description : "hola soy editado",
-        frecuency : [DaysEnum.Monday, DaysEnum.Tuesday, DaysEnum.Wednesday, DaysEnum.Thursday, DaysEnum.Friday, DaysEnum.Saturday, DaysEnum.Sunday],
-        Created: "2024/07/13"
-    } 
-}
 
 
 
