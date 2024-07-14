@@ -26,6 +26,22 @@ export class Utilitiesfile {
     constructor(app: App) {
         this.app = (app)
     }
+
+    async Create({name, properties}  : Props) {
+        const date = new Date();
+        if (properties !== undefined) properties.Created = date.getFullYear() + "/" + (date.getMonth() + 1).toString().padStart(2, '0') + "/" + date.getDate();
+        try {
+        if(await this.Existing({name}))
+            {
+                throw new Error(`File ${name}.md already exists`)
+            }else{
+                this.app.vault.create(`${name}`, `---\n${stringifyYaml(properties)}\n---`)//`# ${properties}`)
+            }
+        } catch (error) {
+            console.error(error)
+            return error
+        }
+    }
     async Existing({name} : Props) {
        const file = await this.Get({name})
        if(file === null){
@@ -65,6 +81,8 @@ export class Utilitiesfile {
     }
 
     async SetProperties({name, properties}  : Props) {
+        const date = new Date();
+        if (properties !== undefined) properties.Modified = date.getFullYear() + "/" + (date.getMonth() + 1).toString().padStart(2, '0') + "/" + date.getDate();
         const text = await this.GetContent({ name });
         const antsfile = text.split('---')[0]
         const propertiesfile = text.split('---')[1] = stringifyYaml(properties)
