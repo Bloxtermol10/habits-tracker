@@ -1,24 +1,41 @@
-import {App} from "obsidian"
+import {App,stringifyYaml} from "obsidian"
 import { load, loadAll } from "js-yaml"
-interface Propsutilities {
-    patch : string
+
+export interface Props{
+    name: string
+    properties?: {
+        description: string
+        frecuency: DaysEnum[]
+        Created?: string 
+        Modified?: string
+    }
 }
 
+export enum DaysEnum{
+    EveryDay = "Every Day",
+    Monday = "Monday",
+    Tuesday = "Tuesday",
+    Wednesday = "Wednesday",
+    Thursday = "Thursday",
+    Friday = "Friday",
+    Saturday = "Saturday",
+    Sunday = "Sunday",
+}
 export class Utilitiesfile {
     private readonly app: App
     constructor(app: App) {
         this.app = (app)
     }
-    async Existing({patch} : Propsutilities) {
-       const file = await this.Get({patch})
+    async Existing({name} : Props) {
+       const file = await this.Get({name})
        if(file === null){
            return false
        }
            return true
     }
-    async Get({patch} : Propsutilities) {
+    async Get({name} : Props) {
 
-        const file = this.app.vault.getFileByPath(patch)
+        const file = this.app.vault.getFileByPath(name)
         if (file === null) {
             return file;
         } else {
@@ -26,33 +43,43 @@ export class Utilitiesfile {
         }
     }
 
-    async Open({patch} : Propsutilities) {
-        await this.Get({patch}).then((file) => {
-            if (file === null) {
-                throw new Error('File not found')
-            }
+    async Open({name} : Props) {
+        await this.Get({name}).then((file) => {
+            if (file === null) throw new Error('File not found')
             this.app.workspace.getLeaf().openFile(file)   
         }).catch((error) => {
             console.error(error)
         })
     }
 
-    private async ReadFileCommon({ patch }: Propsutilities) {
-        const file = await this.Get({ patch });
-        if (file === null) {
-            throw new Error('File not found');
-        }
-        const text = await this.app.vault.read(file);
+    private async GetContent({ name }: Props){
+        const file = await this.Get({ name });
+        if (file === null) throw new Error('File not found')
+            const text = await this.app.vault.read(file);
         return text;
     }
-
-    async GetProperties({patch}  : Propsutilities) {
-        const text = await this.ReadFileCommon({ patch });
+        
+    async GetProperties({name}  : Props) {
+        const text = await this.GetContent({ name });
         return load(text.split('---')[1])
     }
-    
-    async GetJson({patch}  : Propsutilities) {
-        const text = await this.ReadFileCommon({ patch });
+
+    async SetProperties({name, properties}  : Props) {
+        const text = await this.GetContent({ name });
+        const antsfile = text.split('---')[0]
+        const propertiesfile = text.split('---')[1] = stringifyYaml(properties)
+        const restfile = text.split('---')[2]
+        const envproperties = antsfile + '---\n' + propertiesfile + '\n---\n' + restfile
+        const file = this.Get({name}).then((file) => {
+            if (file === null) throw new Error('File not found')
+            const text = this.app.vault.modify(file,envproperties);
+        }).catch((error) => {
+            return error
+        })
+        return envproperties
+    }
+    async GetJson({name}  : Props) {
+        const text = await this.GetContent({ name });
         try {
         const filepart = [{}];
         const documents = loadAll(text);
@@ -65,4 +92,10 @@ export class Utilitiesfile {
        }    
     }
 
+    async delete({name}  : Props) {
+        const file = this.Get({name}).then((file) => {
+            if (file === null) throw new Error('File not found')
+                this.app.vault.delete(file)
+        })
+    }
 }

@@ -1,36 +1,8 @@
 import {App, stringifyYaml} from "obsidian"
-import { Utilitiesfile } from "./Utilitiesfile"
-import { load } from "js-yaml"
-import { themeColorModes } from "@atlaskit/tokens/dist/types/theme-config"
-import { error } from "console"
-export interface PropsCreate{
-    name: string
-    properties: {}
-}
-export enum FrequencyEnum {
-    Daily = "Daily",
-    Weekly = "Weekly",
-    Monthly = "Monthly",
-    Yearly = "Yearly",
-    
-}
+import { Props, Utilitiesfile } from "./Utilitiesfile"
 
-export enum DaysEnum{
-    Monday = "Monday",
-    Tuesday = "Tuesday",
-    Wednesday = "Wednesday",
-    Thursday = "Thursday",
-    Friday = "Friday",
-    Saturday = "Saturday",
-    Sunday = "Sunday",
-}
 
-export type Frequency = 
-     FrequencyEnum.Daily |
-     FrequencyEnum.Weekly |
-     FrequencyEnum.Monthly |
-     FrequencyEnum.Yearly |
-     DaysEnum[]
+
 
 export class Habit {
    private readonly app: App
@@ -38,10 +10,12 @@ export class Habit {
         this.app = (app)
     }
 
-        async Create({name, properties}  : PropsCreate) {
+        async create({name, properties}  : Props) {
             const fileutilities = new Utilitiesfile(this.app)
+            const date = new Date();
+            if (properties !== undefined) properties.Created = date.getFullYear() + "/" + (date.getMonth() + 1).toString().padStart(2, '0') + "/" + date.getDate();
             try {
-            if(await fileutilities.ExistingFile({patch : `${name}.md`}))
+            if(await fileutilities.Existing({name : `${name}.md`}))
                 {
                     throw new Error(`File ${name}.md already exists`)
                 }else{
@@ -52,18 +26,25 @@ export class Habit {
             }
         }
         
-        async GetProperties({name}  : PropsCreate) {
+        async getProperties({name}  : Props) {
             const fileutilities = new Utilitiesfile(this.app)
-            await fileutilities.ReadPropertiesFile({patch: `${name}.md`}).catch((error) => {console.error(error)})              
+            console.log(await fileutilities.GetProperties({name: `${name}.md`}).catch((error) => {console.error(error)}))
+        }
+ 
+        async setProperties ({name, properties}  : Props) {
+            const fileutilities = new Utilitiesfile(this.app)
+            const date = new Date();
+           if (properties !== undefined) properties.Modified = date.getFullYear() + "/" + (date.getMonth() + 1).toString().padStart(2, '0') + "/" + date.getDate();
+           console.log(await fileutilities.SetProperties({name: `${name}.md`, properties}).catch((error) => {console.error(error)}))
+        }
+        async get({name}  : Props) {
+            const fileutilities = new Utilitiesfile(this.app)
+            console.log(await fileutilities.GetJson({name: `${name}.md`}).catch((error) => {console.error(error)}))
         }
 
-        async Get({name}  : PropsCreate) {
+        async delete({name}  : Props) {
             const fileutilities = new Utilitiesfile(this.app)
-            await fileutilities.ReadFile({patch: `${name}.md`}).catch((error) => {console.error(error)})
-        }
-
-        async Modify ({name, properties}  : PropsCreate) {
-            const fileutilities = new Utilitiesfile(this.app)
+            fileutilities.delete({name: `${name}.md`})
         }
 }
 

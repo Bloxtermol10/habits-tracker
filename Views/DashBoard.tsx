@@ -1,5 +1,6 @@
 import Button from "@atlaskit/button/new"
-import { Habit, PropsCreate } from "entities/Habit";
+import { Habit  } from "entities/Habit";
+import {Props, DaysEnum} from "entities/Utilitiesfile";
 import useApp from "hooks/useApp";
 import { MouseEvent } from "react";
 import styled from "styled-components";
@@ -12,14 +13,25 @@ justify-content: center;
 height: 100vh;
 `
 const date = new Date();
-const obj = {
-    clave: "valor",
-    hola: "mundo, como va?, hola?",
-    fecha:"2024/07/19",
-    completado:true,
-    Frecuecia : ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"],
-    FechaCreacion: date.getFullYear() + "/" + (date.getMonth() + 1).toString().padStart(2, '0') + "/" + date.getDate(),
+
+const obj : Props = {
+        name : "6-10",
+        properties:{
+        description : "hola soy nuevo",
+        frecuency : [DaysEnum.EveryDay],
     } 
+}
+const objedit : Props = {
+        name : "6-10",
+        properties:{
+        description : "hola soy editado",
+        frecuency : [DaysEnum.Monday, DaysEnum.Tuesday, DaysEnum.Wednesday, DaysEnum.Thursday, DaysEnum.Friday, DaysEnum.Saturday, DaysEnum.Sunday],
+        Created: "2024/07/13"
+    } 
+}
+
+
+
 
 
 
@@ -28,28 +40,21 @@ function DashBoard() {
 
     const app = useApp()
     const habit = new Habit(app)
-    const props : PropsCreate = {name: "6-10", properties: obj}
+    const props : Props = obj
+    const propsedit : Props = objedit
 
     const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
-        habit.Createhabit(props)
-        habit.Readhabitproperties(props)
-        habit.Readfile(props)
-        // const file = app.vault.getFileByPath("Habits.md");
-        // if (!file) {
-        //     const newFile = app.vault.create("Habits.md", "# Hola");
-        //     newFile
-        //         .then((file) => {
-        //             app.workspace.getLeaf().openFile(file);
-        //         })
-        //         .catch((error) => {
-        //             console.error(error);
-        //         });
-        // } else {
-        //     app.workspace.getLeaf().openFile(file);
-        // }
-
+        habit.create(props)
+        habit.getProperties(props)
+        habit.get(props)
     }
 
+    const handleClickEdit = (event: MouseEvent<HTMLButtonElement>) => {
+        habit.setProperties(propsedit)
+    }
+    const handleClickdelete = (event: MouseEvent<HTMLButtonElement>) => {
+        habit.delete(props)
+    }
     return (
 
         <Container>
@@ -58,6 +63,12 @@ function DashBoard() {
             </h1>
             <Button appearance="primary" onClick={handleClick}>
                 ¡Nuevo habito!
+            </Button>
+            <Button appearance="primary" onClick={handleClickEdit}>
+                ¡Editar habito!
+            </Button>
+            <Button appearance="primary" onClick={handleClickdelete}>
+                ¡Eliminar habito!
             </Button>
         </Container>
 
