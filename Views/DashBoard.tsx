@@ -29,21 +29,32 @@ function DashBoard() {
     const props : Props = obj
     const propsedit : Props = objedit
 
-    const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
+    const handleClick = async (event: MouseEvent<HTMLButtonElement>) => {
         // habit.create(props)
         // habit.getProperties(props)
         // habit.get(props)
-        topics.createtableareas()
-       topics.setareas('Trabajo')
-       console.log(topics.getareas()) 
- 
+       await topics.createtableareas()
+      // console.log("set area : ", await topics.setareas('Empresa'))
+       console.log("get all areas", await topics.getareas())
+       await topics.create()
+       await topics.set('Prueba','Empresa') 
+       await topics.set('Prueba2','Empresa')
+       await topics.set('Prueba3','Empresa')
+       await topics.set('Prueba4','Empresa')
+       await topics.set('Prueba5','Empresa')
+       const result = await topics.get()
+       console.log("get topics :", result.rows)
+       console.log("get topics by area :", await topics.getbyarea('Trabajo'))
     }
-
+    
     const handleClickEdit = (event: MouseEvent<HTMLButtonElement>) => {
         habit.setProperties(propsedit)
     }
-    const handleClickdelete = (event: MouseEvent<HTMLButtonElement>) => {
+    const handleClickdelete = async (event: MouseEvent<HTMLButtonElement>) => {
         habit.delete(props)
+        await topics.delete('Prueba')
+        topics.deletebyarea('Trabajo')
+        topics.deletearea('Trabajo')
     }
     return (
 
