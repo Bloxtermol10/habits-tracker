@@ -97,6 +97,16 @@ async editarea(antarea : string,newarea : string) {
     };
    return await this.fetch(requestBody)
 }
+
+async editareabyid(id : number,area : string) {
+    const requestBody : Props = {
+        dbpath:  this.getdbpath(),
+        method: 'run',
+        query: `UPDATE areas SET name = '${area}' WHERE id = ${id}`,
+        params: []
+    };
+   return await this.fetch(requestBody)
+}
 async deletearea(area : string) {
     const requestBody : Props = {
         dbpath:  this.getdbpath(),
@@ -165,8 +175,25 @@ async set(topic : string,area : string) {
    return await this.fetch(requestBody)
    
 }
-
-async editbyid(id : number,topic : string,area : string) {
+async edit(anttopic : string,newtopic : string) {
+    const requestBody : Props = {
+        dbpath:  this.getdbpath(),
+        method: 'run',
+        query: `UPDATE topics SET name = '${newtopic}' WHERE name = '${anttopic}'`,
+        params: []
+    };
+    return await this.fetch(requestBody)
+}
+async editbyid(id : number,topic : string) {
+    const requestBody : Props = {
+        dbpath:  this.getdbpath(),
+        method: 'run',
+        query: `UPDATE topics SET name = '${topic}' WHERE id = ${id}`,
+        params: []
+    };
+    return await this.fetch(requestBody)
+}
+async editbyidall(id : number,topic : string,area : string) {
     const requestBody : Props = {
         dbpath:  this.getdbpath(),
         method: 'run',
