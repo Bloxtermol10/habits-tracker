@@ -1,5 +1,6 @@
 import Button from "@atlaskit/button/new"
 import { Habit  } from "entities/Habit";
+import { Topics } from "entities/Topics";
 import {Props, DaysEnum} from "entities/Utilitiesfile";
 import useApp from "hooks/useApp";
 import { MouseEvent } from "react";
@@ -24,13 +25,18 @@ function DashBoard() {
 
     const app = useApp()
     const habit = new Habit(app)
+    const topics = new Topics(app, 'obsidian.db')
     const props : Props = obj
     const propsedit : Props = objedit
 
     const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
-        habit.create(props)
-        habit.getProperties(props)
-        habit.get(props)
+        // habit.create(props)
+        // habit.getProperties(props)
+        // habit.get(props)
+        topics.createtableareas()
+       topics.setareas('Trabajo')
+       console.log(topics.getareas()) 
+ 
     }
 
     const handleClickEdit = (event: MouseEvent<HTMLButtonElement>) => {

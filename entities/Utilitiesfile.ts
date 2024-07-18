@@ -1,5 +1,6 @@
 import {App,stringifyYaml} from "obsidian"
 import { load, loadAll } from "js-yaml"
+import path from "path"
 
 export interface Props{
     name: string
@@ -115,5 +116,9 @@ export class Utilitiesfile {
             if (file === null) throw new Error('File not found')
                 this.app.vault.delete(file)
         })
+    }
+
+    dbpath(name : string) {
+        return path.resolve((this.app.vault.adapter as any).basePath, this.app.vault.configDir ,name).replace(/\\/g, '/')
     }
 }
