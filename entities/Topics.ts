@@ -71,6 +71,15 @@ async createtableareas(){
     };
      return await this.fetch(requestBody) 
 }
+async getareabyid(id : number) {
+    const requestBody : Props = {
+        dbpath:  this.getdbpath(),
+        method: 'get',
+        query: `SELECT * FROM areas WHERE id = ${id}`,
+        params: []
+    };
+    return await this.fetch(requestBody)
+}
 async setareas(area : string) {
      const areas = await this.getareas()
      if (areas.rows !== undefined && areas.rows.length > 0) {
@@ -115,6 +124,18 @@ async deletearea(area : string) {
         params: []
     };
     this.editforarea(area,'unassigned')
+   return await this.fetch(requestBody)
+}
+
+async deleteareabyid(id : number) {
+    const area = await this.getareabyid(id)
+    const requestBody : Props = {
+        dbpath:  this.getdbpath(),
+        method: 'run',
+        query: `DELETE FROM areas WHERE id = ${id}`,
+        params: []
+    };
+    this.editforarea(area.rows[0].name,'unassigned')
    return await this.fetch(requestBody)
 }
 
@@ -226,6 +247,16 @@ async delete(topic : string) {
         dbpath:  this.getdbpath(),
         method: 'run',
         query: `DELETE FROM topics WHERE name = '${topic}'`,
+        params: []
+    }
+    return await this.fetch(requestBody)
+}
+
+async deletebyid(id : number) {
+    const requestBody : Props = {
+        dbpath:  this.getdbpath(),
+        method: 'run',
+        query: `DELETE FROM topics WHERE id = ${id}`,
         params: []
     }
     return await this.fetch(requestBody)
