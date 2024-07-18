@@ -1,6 +1,7 @@
 import { App } from "obsidian";
 
 import { Utilitiesfile } from "./Utilitiesfile";
+import { nextTick } from "process";
 
 interface Props {
     dbpath: string
@@ -84,6 +85,68 @@ async setareas(area : string) {
     };
    return await this.fetch(requestBody)
    
+}
+async deletearea(area : string) {
+    const requestBody : Props = {
+        dbpath:  this.getdbpath(),
+        method: 'run',
+        query: `DELETE FROM areas WHERE name = '${area}'`,
+        params: []
+    };
+   return await this.fetch(requestBody)
+}
+
+async create(){
+    const requestBody : Props = {
+        dbpath:  this.getdbpath(),
+        method: 'run',
+        query: `CREATE TABLE IF NOT EXISTS topics (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            area TEXT,
+            name TEXT
+        )`,
+        params: []
+    };
+   return await this.fetch(requestBody)
+}
+
+async get() {
+    const requestBody : Props = {
+        dbpath:  this.getdbpath(),
+        method: 'get',
+        query: "SELECT * FROM topics",
+        params: []
+    };
+    return await this.fetch(requestBody)
+}
+async set(topic : string,area : string) {
+    let existarea = false
+    const areas = await this.getareas()
+    areas.rows.forEach(element => {
+       if(element.name === area) existarea = true
+    });
+    if(!existarea) throw new Error('Area does not exist')
+    const topics = await this.get()
+    topics.rows.forEach(element => {
+        if(element.name === topic) throw new Error('Topic already exists')
+     });
+    const requestBody : Props = {
+        dbpath:  this.getdbpath(),
+        method: 'run',
+        query: `INSERT INTO topics (name, area) VALUES ('${topic}','${area}')`,
+        params: []
+    };
+   return await this.fetch(requestBody)
+   
+}
+async delete(topic : string) {
+    const requestBody : Props = {
+        dbpath:  this.getdbpath(),
+        method: 'run',
+        query: `DELETE FROM topics WHERE name = '${topic}'`,
+        params: []
+    }
+    return await this.fetch(requestBody)
 }
 }
 
