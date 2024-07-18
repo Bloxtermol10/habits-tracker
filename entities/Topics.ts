@@ -119,6 +119,16 @@ async get() {
     };
     return await this.fetch(requestBody)
 }
+
+async getbyarea(area : string) {
+    const requestBody : Props = {
+        dbpath:  this.getdbpath(),
+        method: 'get',
+        query: `SELECT * FROM topics WHERE area = '${area}'`,
+        params: []
+    };
+    return await this.fetch(requestBody)
+}
 async set(topic : string,area : string) {
     let existarea = false
     const areas = await this.getareas()
@@ -138,6 +148,15 @@ async set(topic : string,area : string) {
     };
    return await this.fetch(requestBody)
    
+}
+async deletebyarea(area : string) {
+    const requestBody : Props = {
+        dbpath:  this.getdbpath(),
+        method: 'run',
+        query: `DELETE FROM topics WHERE area = '${area}'`,
+        params: []
+    }
+    return await this.fetch(requestBody)
 }
 async delete(topic : string) {
     const requestBody : Props = {
