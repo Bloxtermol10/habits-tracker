@@ -261,5 +261,4 @@ async deletebyid(id : number) {
     }
     return await this.fetch(requestBody)
 }
-
 }
