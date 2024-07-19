@@ -26,7 +26,7 @@ export class Topics {
     }
 private async fetch(body: Props) {
     try {
-        const response = await fetch('http://localhost:3000/sqlite', {
+        const response = await fetch('http://localhost:4803/sqlite', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -262,4 +262,3 @@ async deletebyid(id : number) {
     return await this.fetch(requestBody)
 }
 }
-
